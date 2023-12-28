@@ -13,11 +13,11 @@ img {
     background-size: 500px;
 }
 .garden {
-    width: 400px;
-    height: 150px;
     background: url(../img/patterns/ground.png);
     background-size: 100px;
     position: absolute;
+    border: 5px solid rgb(150 215 70 / 38%);
+    border-radius: 5px;
 }
 
 .createGardenBtn {
