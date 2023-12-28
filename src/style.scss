@@ -1,0 +1,39 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+img {
+    max-width: 100%;
+}
+
+.game {
+    min-height: 100vh;
+    background: url('../img/patterns/grass.png');
+    background-size: 500px;
+}
+.garden {
+    width: 400px;
+    height: 150px;
+    background: url(../img/patterns/ground.png);
+    background-size: 100px;
+    position: absolute;
+}
+
+.createGardenBtn {
+    background: orange;
+    border: none;
+    border-radius: 7px;
+    padding: 7px 25px;
+    color: white;
+    transition: .2s;
+
+    &:hover {
+        background: rgb(211, 137, 0);
+    }
+
+}
+
+.garden.error {
+    border: 2px solid red;
+}
