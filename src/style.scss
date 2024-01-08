@@ -18,6 +18,12 @@ img {
     position: absolute;
     border: 5px solid rgb(150 215 70 / 38%);
     border-radius: 5px;
+    padding: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    justify-content: center;
+    align-items: center;
 }
 
 .createGardenBtn {
@@ -36,4 +42,16 @@ img {
 
 .garden.error {
     border: 2px solid red;
+}
+.garden-place__product {
+    width: 30px;
+    height: 30px;
+    border-radius: 4px;
+    background: #00000015;
+    transition: .2s;
+    cursor: pointer;
+    &:hover {
+        background: #00000030;
+
+    }
 }

@@ -3,6 +3,7 @@ interface gardenStorageInterface {
   h: number;
   x: number;
   y: number;
+  id: string;
 }
 
 export {gardenStorageInterface}

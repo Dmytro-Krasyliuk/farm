@@ -20,6 +20,9 @@ class LStorage {
 
     return JSON.parse(data);
   }
+  saveData(data: LocalStorageInterface) {
+    localStorage.setItem("data", JSON.stringify(data));
+  }
 }
 
 class LStorageGarden extends LStorage {
@@ -30,7 +33,10 @@ class LStorageGarden extends LStorage {
   }
 
   addGarden(data: gardenStorageInterface) {
-    localStorage.setItem("garden", JSON.stringify(data));
+    // localStorage.setItem("garden", JSON.stringify(data));
+    this.data = this.getData()
+    this.data.gardens.push(data);
+    this.saveData(this.data);
   }
   removeGarden() {}
   getGardens() {}

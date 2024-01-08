@@ -9,14 +9,73 @@ import { gardenStorageInterface } from "./interfaces/gardenStorageInterface";
 import { config } from "./config";
 import { IGardenLast } from "./interfaces/gardenLastInterface";
 
+let game = document.querySelector(".game") as HTMLDivElement;
+
+function showStartGame() {
+  showStartGarden();
+  showStartBalance();
+}
+
+function showStartGarden() {
+  let gardens = lStorageGarden.getData().gardens;
+  gardens.forEach((garden) => {
+    let newGarden = document.createElement("div");
+   
+    newGarden.classList.add("garden");
+    newGarden.style.width = garden.w + "px";
+    newGarden.style.height = garden.h + "px";
+    newGarden.style.top = garden.y + "px";
+    newGarden.style.left = garden.x + "px";
+    newGarden.dataset.id = garden.id;
+    game.append(newGarden);
+     createPlaceProducts(newGarden);
+  });
+}
+
+function showStartBalance() {}
+
+showStartGame();
+function createPlaceProducts(garden : HTMLDivElement) {
+  let paddingGarden = 10;
+  let gapGarden = 5;
+  let widthProduct = 30;
+  let heightProduct = 30;
+
+  let widthGarden =
+    parseInt(getComputedStyle(garden).width) - paddingGarden * 2;
+  let heightGarden =
+    parseInt(getComputedStyle(garden).height) - paddingGarden * 2;
+
+  let elInRow = Math.floor(
+    (widthGarden + gapGarden) / (widthProduct + gapGarden)
+  );
+  let elInCol = Math.floor(
+    (heightGarden + gapGarden) / (heightProduct + gapGarden)
+  );
+
+  // Врахування останнього проміжку в ряду та колонці
+  if (widthGarden % (widthProduct + gapGarden) === 0) {
+    elInRow -= 1;
+  }
+  if (heightGarden % (heightProduct + gapGarden) === 0) {
+    elInCol -= 1;
+  }
+
+  let amountProducts = elInRow * elInCol;
+
+  for (let i = 0; i < amountProducts; i++) {
+    let placeProduct = document.createElement("div");
+    placeProduct.classList.add("garden-place__product");
+    garden.append(placeProduct);
+  }
+}
+
 let waitCreatedGarden = false;
 let processCreatedGarden = false;
 
 let createGardenBtn = document.querySelector(
   ".createGardenBtn"
 ) as HTMLButtonElement;
-
-let game = document.querySelector(".game") as HTMLDivElement;
 
 createGardenBtn.addEventListener("click", function () {
   waitCreatedGarden = true;
@@ -71,8 +130,10 @@ function confirmCreateGarden() {
     h,
     x,
     y,
+    id: idGarden,
   };
   lStorageGarden.addGarden(data);
+  createPlaceProducts(lastGarden);
 }
 
 function rejectCreateGarden() {
@@ -83,12 +144,11 @@ function rejectCreateGarden() {
 function checkGarden(): boolean {
   let { w, h, lastGarden } = getDataLastGarden();
 
-
-  let allGarden = document.querySelectorAll('.garden')
+  let allGarden = document.querySelectorAll(".garden");
   let countError = 0;
 
-  for(let i = 0; i < allGarden.length - 1; i++) {
-    let garden = lastGarden.getBoundingClientRect()
+  for (let i = 0; i < allGarden.length - 1; i++) {
+    let garden = lastGarden.getBoundingClientRect();
     let currentGarden = allGarden[i].getBoundingClientRect();
 
     let result =
@@ -96,18 +156,12 @@ function checkGarden(): boolean {
       garden.bottom + 20 > currentGarden.top &&
       garden.left - 20 < currentGarden.right &&
       garden.right + 20 > currentGarden.left;
-    
+
     if (result) {
-      console.log('error')
-      countError++
-      
-    } 
-
+      console.log("error");
+      countError++;
+    }
   }
-
-  
-
-
 
   if (countError > 0 || w < config.garden.minW || h < config.garden.minH) {
     markInvalidGarden(lastGarden);
@@ -115,17 +169,20 @@ function checkGarden(): boolean {
     markValidGarden(lastGarden);
   }
 
-  return ! lastGarden.classList.contains('error') && countError == 0 && w > config.garden.minW && h > config.garden.minH;
+  return (
+    !lastGarden.classList.contains("error") &&
+    countError == 0 &&
+    w > config.garden.minW &&
+    h > config.garden.minH
+  );
 }
 
 function markInvalidGarden(lastGarden: HTMLDivElement) {
-  lastGarden.classList.add('error')
+  lastGarden.classList.add("error");
 }
 function markValidGarden(lastGarden: HTMLDivElement) {
-  lastGarden.classList.remove('error')
+  lastGarden.classList.remove("error");
 }
-
-
 
 function getDataLastGarden(): IGardenLast {
   let amountGarden = document.querySelectorAll(".garden").length;
