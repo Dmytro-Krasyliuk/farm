@@ -8,8 +8,16 @@ import { lStorageGarden, lStorageProducts } from "./lstorage";
 import { gardenStorageInterface } from "./interfaces/gardenStorageInterface";
 import { config } from "./config";
 import { IGardenLast } from "./interfaces/gardenLastInterface";
+import { IProduct } from "./interfaces/productInterface";
 
 let game = document.querySelector(".game") as HTMLDivElement;
+let selectedProduct : IProduct | null =   {
+    title: "Морква",
+    price: 40,
+    image: "carrot.png",
+    time: 150,
+    profit: 85,
+  }
 
 function showStartGame() {
   showStartGarden();
@@ -66,6 +74,7 @@ function createPlaceProducts(garden : HTMLDivElement) {
   for (let i = 0; i < amountProducts; i++) {
     let placeProduct = document.createElement("div");
     placeProduct.classList.add("garden-place__product");
+    placeProduct.classList.add("empty");
     garden.append(placeProduct);
   }
 }
@@ -206,4 +215,42 @@ function getPriceGarden(wLastGarden: number, hLastGarden: number) {
   let s = wLastGarden * hLastGarden;
   let priceGarden = Math.round(s * 0.5);
   alert(priceGarden);
+}
+
+
+
+let gardenPlaceProduct = document.querySelectorAll('.garden-place__product')
+
+
+function handlerHoverProduct(el: HTMLDivElement) {
+  if (selectedProduct != null) {
+    if (el.classList.contains("empty")) {
+      el.style.backgroundImage = `url(../img/${selectedProduct.image})`;
+      el.style.backgroundSize = "contain";
+      el.style.backgroundPosition = "center";
+      el.style.backgroundRepeat = "no-repeat";
+      el.classList.add("process");
+
+
+    }
+    if (el.classList.contains("process")) {
+            setTimeout(() => {
+              if (el.classList.contains("process")) {
+                el.classList.add("ready");
+              }
+            }, selectedProduct.time*1000);
+    }
+
+    if (el.classList.contains("ready")) {
+      el.classList.remove("ready");
+      el.classList.remove("process");
+      el.style.backgroundImage = "";
+      el.classList.add("empty");
+    }
+  }
+}
+
+for (let i = 0; i < gardenPlaceProduct.length; i++) {
+  let el = gardenPlaceProduct[i] as HTMLDivElement;
+  el.addEventListener("mouseover", () => { handlerHoverProduct(el) });
 }

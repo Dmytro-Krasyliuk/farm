@@ -52,6 +52,14 @@ img {
     cursor: pointer;
     &:hover {
         background: #00000030;
+    }
+    &.empty {
 
+    }
+    &.process {
+        background: #00000005;
+    }
+    &.ready {
+        background: #e7b10fe4;
     }
 }
